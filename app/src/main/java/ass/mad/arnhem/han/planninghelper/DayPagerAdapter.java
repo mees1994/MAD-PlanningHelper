@@ -6,10 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
 
-import ass.mad.arnhem.han.planninghelper.Domain.Day;
 import ass.mad.arnhem.han.planninghelper.Domain.Week;
 
 /**
@@ -27,13 +24,15 @@ public class DayPagerAdapter extends FragmentStatePagerAdapter {
 
         for (int i = 0; i < week.getDays().size(); i++) {
             String weekday = new DateFormatSymbols().getShortWeekdays()[week.getDays().get(i).getDayOfTheWeek()];
+
             tabs.add(weekday);
+            //tabs.
         }
     }
 
     @Override
     public Fragment getItem(int position) {
-        return DayFragment.newInstance(position);
+        return DayFragment.newInstance(position, week);
     }
 
     @Override

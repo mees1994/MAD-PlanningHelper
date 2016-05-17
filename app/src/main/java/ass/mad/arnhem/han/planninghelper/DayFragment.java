@@ -1,10 +1,7 @@
 package ass.mad.arnhem.han.planninghelper;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,31 +10,31 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.Console;
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
+
+import ass.mad.arnhem.han.planninghelper.Domain.Week;
 
 /**
  * Created by Mees on 5/17/2016.
  */
-public class DayFragment extends Fragment {
-
-    private TaskAdapter taskAdapter;
-    private RecyclerView recyclerView;
+public class DayFragment extends ListFragment {
     int mNum;
+    int mWeekNr;
 
     /**
      * Create a new instance of CountingFragment, providing "num"
      * as an argument.
      */
-    static DayFragment newInstance(int num) {
+    static DayFragment newInstance(int num, Week week) {
         DayFragment f = new DayFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
         args.putInt("num", num + 1);
+        args.putInt("weeknr", week.getWeekNr());
+
         f.setArguments(args);
 
         return f;
@@ -50,6 +47,7 @@ public class DayFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNum = getArguments() != null ? getArguments().getInt("num") : 1;
+        mWeekNr = getArguments() != null ? getArguments().getInt("weeknr") : 1;
     }
 
     /**
@@ -62,27 +60,30 @@ public class DayFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_day_pager, container, false);
         View tv = v.findViewById(R.id.text);
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_tasks);
-        taskAdapter = new TaskAdapter(getContext());
-        taskAdapter.addItem(new RecyclerviewTask("Schoenen poetsen", "Dikke Airmaxjes wassen", "11:00", "12:00", null));
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.WEEK_OF_YEAR, mWeekNr);
+        cal.set(Calendar.DAY_OF_WEEK, mNum);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
+        String currentDate = sdf.format(cal.getTime());
 
-        recyclerView.setAdapter(taskAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //int currentDate = mNum;
 
-        Calendar calendar = Calendar.getInstance();
 
-        SimpleDateFormat currentDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        int currentDate = mNum;
-
-        //((TextView) tv).setText(currentDate.format());
+        ((TextView) tv).setText(currentDate);
         return v;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        String[] arrayTest = {"Peter", "is", "Homo"};
 
-        //setListAdapter(new ArrayAdapter<String>(getActivity(),
-        //        android.R.layout.simple_list_item_1, arrayTest));
+        setListAdapter(new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_list_item_1, arrayTest));
+    }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        Log.i("FragmentList", "Item clicked: " + id);
     }
 }
