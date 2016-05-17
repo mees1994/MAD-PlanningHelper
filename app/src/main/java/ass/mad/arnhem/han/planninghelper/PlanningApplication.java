@@ -5,7 +5,6 @@ import android.app.Application;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import ass.mad.arnhem.han.planninghelper.Domain.Day;
 import ass.mad.arnhem.han.planninghelper.Domain.Week;
@@ -40,7 +39,7 @@ public class PlanningApplication extends Application {
         days.add(new Day(calendar.FRIDAY, null));
         days.add(new Day(calendar.SATURDAY, null));
 
-        week = new Week(1, 2017, days);
+        week = new Week(Calendar.WEEK_OF_YEAR, Calendar.YEAR, days);
     }
 
     public Week getWeek() {

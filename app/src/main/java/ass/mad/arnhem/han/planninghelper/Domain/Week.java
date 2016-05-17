@@ -20,4 +20,9 @@ public class Week {
     public ArrayList<Day> getDays() {
         return days;
     }
+
+    public int getWeekNr() {
+        return weekNr;
+    }
+
 }

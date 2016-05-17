@@ -10,28 +10,31 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.Console;
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
+
+import ass.mad.arnhem.han.planninghelper.Domain.Week;
 
 /**
  * Created by Mees on 5/17/2016.
  */
 public class DayFragment extends ListFragment {
     int mNum;
+    int mWeekNr;
 
     /**
      * Create a new instance of CountingFragment, providing "num"
      * as an argument.
      */
-    static DayFragment newInstance(int num) {
+    static DayFragment newInstance(int num, Week week) {
         DayFragment f = new DayFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
         args.putInt("num", num + 1);
+        args.putInt("weeknr", week.getWeekNr());
+
         f.setArguments(args);
 
         return f;
@@ -44,6 +47,7 @@ public class DayFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mNum = getArguments() != null ? getArguments().getInt("num") : 1;
+        mWeekNr = getArguments() != null ? getArguments().getInt("weeknr") : 1;
     }
 
     /**
@@ -56,13 +60,16 @@ public class DayFragment extends ListFragment {
         View v = inflater.inflate(R.layout.fragment_day_pager, container, false);
         View tv = v.findViewById(R.id.text);
 
-        Calendar calendar = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.WEEK_OF_YEAR, mWeekNr);
+        cal.set(Calendar.DAY_OF_WEEK, mNum);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
+        String currentDate = sdf.format(cal.getTime());
 
-        SimpleDateFormat currentDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        int currentDate = mNum;
+        //int currentDate = mNum;
 
 
-        //((TextView) tv).setText(currentDate.format());
+        ((TextView) tv).setText(currentDate);
         return v;
     }
 
