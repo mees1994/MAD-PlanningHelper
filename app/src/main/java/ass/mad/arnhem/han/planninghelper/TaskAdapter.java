@@ -31,112 +31,47 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> 
 
     private LayoutInflater inflater;
     private Context context;
-    private List<RecyclerviewMovieDetail> items = new ArrayList<>();
+    private List<RecyclerviewTask> items = new ArrayList<>();
 
-    public MovieDetailAdapter(Context context) {
+    public TaskAdapter(Context context) {
         inflater = LayoutInflater.from(context);
         this.context = context;
     }
 
-    public void addItem(RecyclerviewMovieDetail recyclerviewMovieDetail) {
-        items.add(recyclerviewMovieDetail);
+    public void addItem(RecyclerviewTask recyclerviewTask) {
+        items.add(recyclerviewTask);
         notifyDataSetChanged();
     }
 
     @Override
     public myViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         myViewHolder holder;
-        if (viewType == MOVIE_DETAIL) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_movie_detail, parent, false);
-            holder = new myViewHolder(view);
-        } else if (viewType == MOVIE_VIDEO) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_movie_video, parent, false);
-            holder = new myViewHolder(view);
-        } else if (viewType == MOVIE_REVIEW) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_movie_review, parent, false);
-            holder = new myViewHolder(view);
-        } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_movie_detail_section_title, parent, false);
-            holder = new myViewHolder(view);
-        }
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_list_task_row, parent, false);
+        holder = new myViewHolder(view);
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final myViewHolder holder, int position) {
-        final RecyclerviewMovieDetail current = items.get(position);
-        if (getItemViewType(position) == MOVIE_DETAIL) {
-            holder.movieTitle.setText(current.getMovieTitle());
-            Picasso.with(context)
-                    .load(BASE_URL + current.getDetailImage())
-                    .resize(context.getResources().getDisplayMetrics().widthPixels / 3, context.getResources().getDisplayMetrics().heightPixels /3)
-                    .into(holder.detailImage);
-            holder.movieReleaseDate.setText(current.getMovieReleaseDate());
-            holder.movieScore.setText(current.getMovieScore());
-            holder.movieOverview.setText(current.getMovieOverview());
-            String btnText = current.isFavorite() ? "Unmark as favorite" : "Mark as favorite";
-            holder.favoriteBtn.setText(btnText);
-            holder.favoriteBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (current.isFavorite()) {
-                        holder.favoriteBtn.setText("Mark as favorite");
-                        current.setIsFavorite(false);
+        final RecyclerviewTask current = items.get(position);
 
-                        int deleted = 0;
-                        deleted = context.getContentResolver().delete(MovieContract.MovieEntry.CONTENT_URI,  "_id=?", new String[]{current.getMovieId() +""});
-                        Log.d(this.toString(), "Favorite deleted. " + deleted + " Deleted");
-                    } else {
-                        holder.favoriteBtn.setText("Unmark as favorite");
-                        current.setIsFavorite(true);
-                        Vector<ContentValues> cVVector = new Vector<>();
+        holder.taskTitle.setText(current.getTaskTitle());
+        holder.taskDescription.setText(current.getTaskDescription());
+        holder.startTime.setText(current.getStartTime());
+        holder.endTime.setText(current.getEndTime());
 
-                        ContentValues movieValues = new ContentValues();
-
-                        movieValues.put(MovieContract.MovieEntry._ID, current.getMovieId());
-                        movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_TITLE, current.getMovieTitle());
-                        movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER, current.getDetailImage());
-                        movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_RELEASE_DATE, current.getMovieReleaseDate());
-                        movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_SCORE, current.getMovieScore());
-                        movieValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_OVERVIEW, current.getMovieOverview());
-
-                        cVVector.add(movieValues);
-
-                        int inserted = 0;
-                        // add to database
-                        if ( cVVector.size() > 0 ) {
-                            ContentValues[] cvArray = new ContentValues[cVVector.size()];
-                            cVVector.toArray(cvArray);
-                            inserted = context.getContentResolver().bulkInsert(MovieContract.MovieEntry.CONTENT_URI, cvArray);
-                        }
-                        Log.d(this.toString(), "Favorite Saved. " + inserted + " Inserted");
-                    }
-                }
-            });
-        } else if (getItemViewType(position) == MOVIE_VIDEO) {
-            holder.videoName.setText(current.getVideoName());
-            holder.layout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + current.getVideoKey())));
-                }
-            });
-        } else if (getItemViewType(position) == MOVIE_REVIEW) {
-            holder.reviewAuthor.setText(current.getReviewAuthor());
-            holder.reviewContent.setText(current.getReviewContent());
-        } else if (getItemViewType(position) == MOVIE_DETAIL_SECTION_HEADER) {
-            holder.sectionHeader.setText(current.getSectionHeader());
-        }
     }
 
-    @Override
+    /*@Override
     public int getItemViewType(int position) {
-        RecyclerviewMovieDetail item;
+        RecyclerviewTask item;
         item = getDataByPosition(position);
         return item.getViewType();
-    }
+    }*/
 
-    public RecyclerviewMovieDetail getDataByPosition(int position) {
+    public RecyclerviewTask getDataByPosition(int position) {
         return items.get(position);
     }
 
@@ -155,7 +90,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> 
 
         public myViewHolder(View itemView) {
             super(itemView);
-            taskTitle = (TextView) itemView.findViewById(R.id.movie_title);
+            taskTitle = (TextView) itemView.findViewById(R.id.task_title);
+            taskDescription = (TextView) itemView.findViewById(R.id.task_description);
+            startTime = (TextView) itemView.findViewById(R.id.task_start_time);
+            endTime = (TextView) itemView.findViewById(R.id.task_end_time);
 
         }
     }

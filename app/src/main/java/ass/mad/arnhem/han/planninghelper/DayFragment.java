@@ -1,7 +1,10 @@
 package ass.mad.arnhem.han.planninghelper;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +22,10 @@ import java.util.Calendar;
 /**
  * Created by Mees on 5/17/2016.
  */
-public class DayFragment extends ListFragment {
+public class DayFragment extends Fragment {
+
+    private TaskAdapter taskAdapter;
+    private RecyclerView recyclerView;
     int mNum;
 
     /**
@@ -56,11 +62,17 @@ public class DayFragment extends ListFragment {
         View v = inflater.inflate(R.layout.fragment_day_pager, container, false);
         View tv = v.findViewById(R.id.text);
 
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_tasks);
+        taskAdapter = new TaskAdapter(getContext());
+        taskAdapter.addItem(new RecyclerviewTask("Schoenen poetsen", "Dikke Airmaxjes wassen", "11:00", "12:00", null));
+
+        recyclerView.setAdapter(taskAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         Calendar calendar = Calendar.getInstance();
 
         SimpleDateFormat currentDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         int currentDate = mNum;
-
 
         //((TextView) tv).setText(currentDate.format());
         return v;
@@ -69,14 +81,8 @@ public class DayFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String[] arrayTest = {"Peter", "is", "Homo"};
 
-        setListAdapter(new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, arrayTest));
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        Log.i("FragmentList", "Item clicked: " + id);
+        //setListAdapter(new ArrayAdapter<String>(getActivity(),
+        //        android.R.layout.simple_list_item_1, arrayTest));
     }
 }
