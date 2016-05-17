@@ -1,7 +1,10 @@
 package ass.mad.arnhem.han.planninghelper;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +22,13 @@ import ass.mad.arnhem.han.planninghelper.Domain.Week;
 /**
  * Created by Mees on 5/17/2016.
  */
-public class DayFragment extends ListFragment {
+public class DayFragment extends Fragment {
+
     int mNum;
     int mWeekNr;
+    private RecyclerView recyclerView;
+    private TaskAdapter taskAdapter;
 
-    /**
-     * Create a new instance of CountingFragment, providing "num"
-     * as an argument.
-     */
     static DayFragment newInstance(int num, Week week) {
         DayFragment f = new DayFragment();
 
@@ -40,9 +42,6 @@ public class DayFragment extends ListFragment {
         return f;
     }
 
-    /**
-     * When creating, retrieve this instance's number from its arguments.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,10 +49,6 @@ public class DayFragment extends ListFragment {
         mWeekNr = getArguments() != null ? getArguments().getInt("weeknr") : 1;
     }
 
-    /**
-     * The Fragment's UI is just a simple text view showing its
-     * instance number.
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,6 +63,12 @@ public class DayFragment extends ListFragment {
 
         //int currentDate = mNum;
 
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_tasks);
+        taskAdapter = new TaskAdapter(getContext());
+        taskAdapter.addItem(new RecyclerviewTask("Schoenen poetsen", "Dikke Airmaxjes wassen", "11:00", "12:00", null));
+
+        recyclerView.setAdapter(taskAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         ((TextView) tv).setText(currentDate);
         return v;
@@ -76,14 +77,5 @@ public class DayFragment extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        String[] arrayTest = {"Peter", "is", "Homo"};
-
-        setListAdapter(new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, arrayTest));
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        Log.i("FragmentList", "Item clicked: " + id);
     }
 }
