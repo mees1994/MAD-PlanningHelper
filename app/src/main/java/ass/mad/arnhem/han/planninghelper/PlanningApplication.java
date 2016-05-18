@@ -3,10 +3,13 @@ package ass.mad.arnhem.han.planninghelper;
 import android.app.Application;
 
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 import ass.mad.arnhem.han.planninghelper.Domain.Day;
+import ass.mad.arnhem.han.planninghelper.Domain.Task;
 import ass.mad.arnhem.han.planninghelper.Domain.Week;
 
 /**
@@ -30,14 +33,19 @@ public class PlanningApplication extends Application {
         int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         String weekday = new DateFormatSymbols().getShortWeekdays()[dayOfWeek];
 
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        String currentTime = sdf.format(calendar.getTime());
+        ArrayList<Task> tasks = new ArrayList<>();
+        tasks.add(new Task(1, "Kamer opruimen", "De kamer moet spiek en span zijn", currentTime, currentTime, null, false));
+
         ArrayList<Day> days = new ArrayList<>();
-        days.add(new Day(calendar.SUNDAY, null));
-        days.add(new Day(calendar.MONDAY, null));
-        days.add(new Day(calendar.TUESDAY, null));
-        days.add(new Day(calendar.WEDNESDAY, null));
-        days.add(new Day(calendar.THURSDAY, null));
-        days.add(new Day(calendar.FRIDAY, null));
-        days.add(new Day(calendar.SATURDAY, null));
+        days.add(new Day(calendar.SUNDAY, new ArrayList<Task>()));
+        days.add(new Day(calendar.MONDAY, new ArrayList<Task>()));
+        days.add(new Day(calendar.TUESDAY, new ArrayList<Task>()));
+        days.add(new Day(calendar.WEDNESDAY, new ArrayList<Task>()));
+        days.add(new Day(calendar.THURSDAY, tasks));
+        days.add(new Day(calendar.FRIDAY, new ArrayList<Task>()));
+        days.add(new Day(calendar.SATURDAY, new ArrayList<Task>()));
 
         week = new Week(Calendar.WEEK_OF_YEAR, Calendar.YEAR, days);
     }

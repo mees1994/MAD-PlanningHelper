@@ -15,7 +15,15 @@ public class Day {
         this.tasks = tasks;
     }
 
+    public void addTask(Task task) {
+        tasks.add(task);
+    }
+
     public int getDayOfTheWeek() {
         return dayOfTheWeek;
+    }
+
+    public ArrayList<Task> getTasks() {
+        return tasks;
     }
 }

@@ -1,6 +1,8 @@
 package ass.mad.arnhem.han.planninghelper;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,9 +16,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import ass.mad.arnhem.han.planninghelper.Domain.Day;
+import ass.mad.arnhem.han.planninghelper.Domain.Task;
 import ass.mad.arnhem.han.planninghelper.Domain.Week;
 
 /**
@@ -26,15 +31,22 @@ public class DayFragment extends Fragment {
 
     int mNum;
     int mWeekNr;
+
     private RecyclerView recyclerView;
     private TaskAdapter taskAdapter;
+    private View dateTextView;
+    private FloatingActionButton createTaskBtn;
+
+    Week week;
+    Day currentDay;
+    ArrayList<Task> tasks;
 
     static DayFragment newInstance(int num, Week week) {
         DayFragment f = new DayFragment();
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putInt("num", num + 1);
+        args.putInt("num", num);
         args.putInt("weeknr", week.getWeekNr());
 
         f.setArguments(args);
@@ -53,25 +65,45 @@ public class DayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_day_pager, container, false);
-        View tv = v.findViewById(R.id.text);
+        initView(v);
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.WEEK_OF_YEAR, mWeekNr);
-        cal.set(Calendar.DAY_OF_WEEK, mNum);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
-        String currentDate = sdf.format(cal.getTime());
-
-        //int currentDate = mNum;
-
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_tasks);
-        taskAdapter = new TaskAdapter(getContext());
-        taskAdapter.addItem(new RecyclerviewTask("Schoenen poetsen", "Dikke Airmaxjes wassen", "11:00", "12:00", null));
-
+        for (Task task: tasks) {
+            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), null));
+        }
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        ((TextView) tv).setText(currentDate);
+        ((TextView) dateTextView).setText(calculateDate());
+        createTaskBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CreateTaskActivity.class);
+                intent.putExtra("weekNr", mWeekNr);
+                intent.putExtra("dayNr", mNum);
+                startActivity(intent);
+            }
+        });
+
         return v;
+    }
+
+    private void initView(View v) {
+        dateTextView = v.findViewById(R.id.text);
+        createTaskBtn = (FloatingActionButton) getActivity().findViewById(R.id.create_task_fab);// v.findViewById(R.id.create_task_fab);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_tasks);
+        taskAdapter = new TaskAdapter(getContext());
+
+        week = PlanningApplication.getInstance().getWeek();
+        Log.d("mnum", mNum + "");
+        currentDay = week.getDays().get(mNum);
+        tasks = currentDay.getTasks();
+    }
+
+    private String calculateDate() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.WEEK_OF_YEAR, mWeekNr);
+        cal.set(Calendar.DAY_OF_WEEK, mNum + 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
+        return sdf.format(cal.getTime());
     }
 
     @Override
