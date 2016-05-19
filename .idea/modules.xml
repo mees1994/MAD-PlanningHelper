@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MAD-PlanningHelper.iml" filepath="$PROJECT_DIR$/MAD-PlanningHelper.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/planninghelper.iml" filepath="$PROJECT_DIR$/planninghelper.iml" />
     </modules>
   </component>
 </project>
