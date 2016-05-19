@@ -39,6 +39,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ass.mad.arnhem.han.planninghelper.MainActivity" />
         </activity>
+        <activity
+            android:name=".users.zoekVriendenActivity"
+            android:label="@string/title_activity_zoek_vrienden"
+            android:parentActivityName=".users.userActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ass.mad.arnhem.han.planninghelper.users.userActivity" />
+        </activity>
     </application>
 
 </manifest>

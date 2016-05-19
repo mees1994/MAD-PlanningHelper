@@ -1,7 +1,9 @@
 package ass.mad.arnhem.han.planninghelper.users;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -115,6 +117,14 @@ public class createUserActivity extends AppCompatActivity {
                 Log.d("test",message);
 
                 if (success == 1) {
+
+                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("gebruikersnaam", gebruikersnaam);
+                    editor.putString("voornaam",voornaam);
+                    editor.putString("achternaam",achternaam);
+                    editor.commit();
+
                     // successfully created product
                     Intent i = new Intent(getApplicationContext(), userActivity.class);
                     startActivity(i);

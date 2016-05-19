@@ -1,7 +1,9 @@
 package ass.mad.arnhem.han.planninghelper.users;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -9,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -56,22 +59,38 @@ public class userActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        // Loading products in Background Thread
-        new loadUser().execute();
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        String gebruikersnaam = sharedPref.getString("gebruikersnaam", "nousername");
+        String voornaam = sharedPref.getString("voornaam","novoornaame");
+        String achternaam = sharedPref.getString("achternaam","noachternaam");
 
-//        btnCreateUser = (Button) findViewById(R.id.btnCreateUser);
-//
-//        // view products click event
-//        btnCreateUser.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                // Launching All products Activity
-//                Intent i = new Intent(getApplicationContext(), createUserActivity.class);
-//                startActivity(i);
-//
-//            }
-//        });
+        // Loading products in Background Thread
+        if(gebruikersnaam == "nousername" || voornaam == "novoornaame" || achternaam == "noachternaam") {
+            new loadUser().execute();
+        } else{
+            TextView txtGebruikersnaam = (TextView) findViewById(R.id.overviewGebruikersnaam);
+            TextView textVoornaam = (TextView) findViewById(R.id.overviewVoornaam);
+            TextView textAchternaam = (TextView) findViewById(R.id.overviewAchternaam);
+
+            // display product data in EditText
+            txtGebruikersnaam.setText(gebruikersnaam);
+            textVoornaam.setText(voornaam);
+            textAchternaam.setText(achternaam);
+        }
+
+        btnCreateUser = (Button) findViewById(R.id.buttonZoekVrienden);
+
+        // view products click event
+        btnCreateUser.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                // Launching All products Activity
+                Intent i = new Intent(getApplicationContext(), zoekVriendenActivity.class);
+                startActivity(i);
+
+            }
+        });
     }
 
 
@@ -98,7 +117,7 @@ public class userActivity extends AppCompatActivity {
     }
 
     /**
-     * Background Async Task to Load all product by making HTTP Request
+     * Background Async Task to Load the user by making HTTP Request
      * */
     class loadUser extends AsyncTask<String, String, String[]> {
 
@@ -109,14 +128,14 @@ public class userActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             pDialog = new ProgressDialog(userActivity.this);
-            pDialog.setMessage("Loading product details. Please wait...");
+            pDialog.setMessage("Loading user details. Please wait...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
             pDialog.show();
         }
 
         /**
-         * Getting product details in background thread
+         * Getting user details in background thread
          * */
         protected String[] doInBackground(String... params) {
             String[] resultProduct = new String[3];
@@ -134,7 +153,7 @@ public class userActivity extends AppCompatActivity {
                         url_get_user_by_id, "GET", paramsGet);
 
                 // check your log for json response
-                Log.d("Single Product Details", json.toString());
+                Log.d("Single user Details", json.toString());
 
                 // json success tag
                 success = json.getInt(TAG_SUCCESS);
