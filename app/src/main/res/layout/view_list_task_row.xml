@@ -77,4 +77,11 @@
         android:layout_marginRight="16dp"
         />
 
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="4dp"
+        android:background="@color/colorDevider"
+        android:layout_alignParentBottom="true"
+        />
+
 </RelativeLayout>

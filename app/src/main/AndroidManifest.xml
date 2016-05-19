@@ -19,7 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateTaskActivity"></activity>
+        <activity android:name=".CreateTaskActivity" />
+        <activity
+            android:name=".DetailTaskActivity"
+            android:label="@string/title_activity_detail_task"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ass.mad.arnhem.han.planninghelper.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package ass.mad.arnhem.han.planninghelper;
 
 import android.app.Activity;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -95,14 +96,19 @@ public class CreateTaskActivity extends AppCompatActivity implements View.OnClic
         }
         if (v == btnSave) {
             Week week = PlanningApplication.getInstance().getWeek();
-            Log.d("dayNr", "" + dayNr);
-            week.getDays().get(dayNr+1).addTask(new Task(1,
+            //Log.d("dayNr", "" + dayNr);
+            week.getDays().get(dayNr).addTask(new Task(1,
                     txtTaskTitle.getText().toString(),
                     txtTaskDescription.getText().toString(),
                     txtStartTime.getText().toString(),
                     txtEndTime.getText().toString(),
                     null, false));
 
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("dayNr", dayNr);
+            //startActivity(intent);
+
+            setResult(RESULT_OK, intent);
             finish();
         }
     }

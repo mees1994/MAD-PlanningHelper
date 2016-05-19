@@ -57,6 +57,7 @@ public class DayFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mNum = getArguments() != null ? getArguments().getInt("num") : 1;
         mWeekNr = getArguments() != null ? getArguments().getInt("weeknr") : 1;
     }
@@ -79,7 +80,7 @@ public class DayFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), CreateTaskActivity.class);
                 intent.putExtra("weekNr", mWeekNr);
                 intent.putExtra("dayNr", mNum);
-                startActivity(intent);
+                getActivity().startActivityForResult(intent, 1);
             }
         });
 
@@ -88,12 +89,11 @@ public class DayFragment extends Fragment {
 
     private void initView(View v) {
         dateTextView = v.findViewById(R.id.text);
-        createTaskBtn = (FloatingActionButton) getActivity().findViewById(R.id.create_task_fab);// v.findViewById(R.id.create_task_fab);
+        createTaskBtn = (FloatingActionButton) v.findViewById(R.id.create_task_fab);// v.findViewById(R.id.create_task_fab);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_tasks);
         taskAdapter = new TaskAdapter(getContext());
 
         week = PlanningApplication.getInstance().getWeek();
-        Log.d("mnum", mNum + "");
         currentDay = week.getDays().get(mNum);
         tasks = currentDay.getTasks();
     }
@@ -110,4 +110,18 @@ public class DayFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
+    public void refreshRecyclerview() {
+        week = PlanningApplication.getInstance().getWeek();
+        currentDay = week.getDays().get(mNum);
+        tasks = currentDay.getTasks();
+
+        taskAdapter.clearItems();
+
+        for (Task task: tasks) {
+            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), null));
+        }
+    }
+
+
 }

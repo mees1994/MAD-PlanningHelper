@@ -1,9 +1,12 @@
 package ass.mad.arnhem.han.planninghelper;
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,6 +17,8 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     PlanningApplication app;
+    ViewPager viewPager;
+    DayPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +37,12 @@ public class MainActivity extends AppCompatActivity {
 //        tabHost.setType(MaterialTabHost.Type.Centered);
 //        tabHost.setType(MaterialTabHost.Type.LeftOffset);
 
-        DayPagerAdapter pagerAdapter = new DayPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new DayPagerAdapter(getSupportFragmentManager());
         for (int i = 0; i < pagerAdapter.getCount(); i++) {
             tabHost.addTab(pagerAdapter.getPageTitle(i));
         }
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOnPageChangeListener(tabHost);
 
@@ -53,7 +58,16 @@ public class MainActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(position);
             }
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            viewPager.setCurrentItem(data.getIntExtra("dayNr", 1));
+
+            DayFragment fragment = (DayFragment) pagerAdapter.getRegisteredFragment(data.getIntExtra("dayNr", 1));
+            fragment.refreshRecyclerview();
+        }
     }
 
     @Override

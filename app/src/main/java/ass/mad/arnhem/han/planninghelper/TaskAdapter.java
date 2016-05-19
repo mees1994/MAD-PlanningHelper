@@ -38,6 +38,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> 
         this.context = context;
     }
 
+    public void clearItems() {
+        items.clear();
+    }
+
     public void addItem(RecyclerviewTask recyclerviewTask) {
         items.add(recyclerviewTask);
         notifyDataSetChanged();
