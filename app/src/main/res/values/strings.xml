@@ -6,4 +6,17 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_create_user">createUserActivity</string>
     <string name="title_activity_zoek_vrienden">Zoek vrienden</string>
+
+    <array name="icon_list">
+        <item>Custom</item>
+        <item>Book</item>
+        <item>Cooking</item>
+        <item>Pet</item>
+        <item>Sport</item>
+        <item>Health</item>
+        <item>Fix</item>
+        <item>Cleaning</item>
+        <item>Washing</item>
+        <item>Gym</item>
+    </array>
 </resources>

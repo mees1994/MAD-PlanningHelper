@@ -60,6 +60,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> 
         holder.taskDescription.setText(current.getTaskDescription());
         holder.startTime.setText(current.getStartTime());
         holder.endTime.setText(current.getEndTime());
+        holder.icon.setImageDrawable(context.getDrawable(current.getIcon()));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +101,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> 
             startTime = (TextView) itemView.findViewById(R.id.task_start_time);
             endTime = (TextView) itemView.findViewById(R.id.task_end_time);
 
+            icon = (ImageView) itemView.findViewById(R.id.task_icon);
         }
     }
 }

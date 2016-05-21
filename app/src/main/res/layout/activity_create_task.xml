@@ -141,6 +141,7 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
+                    android:id="@+id/create_task_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/list"/>
@@ -157,6 +158,16 @@
             </RelativeLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/create_task_error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Not all fields are correct"
+            android:layout_margin="16dp"
+            android:textColor="@color/colorError"
+            android:visibility="invisible"/>
 
     </LinearLayout>
 

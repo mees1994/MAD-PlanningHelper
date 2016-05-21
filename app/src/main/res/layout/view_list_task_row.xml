@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="88dp"
     android:orientation="vertical"
-    tools:context=".HomeJouwAuditsFragment"
+    tools:context=".MainActivity"
     android:clickable="true">
 
     <ImageView
@@ -41,12 +41,12 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="is Gay"
+            android:maxLines="2"
+            android:text="Je moet je kamer helemaal opruimen, de afwas doen en als er nog tijd over is het hele huis stofzuigen"
             android:textSize="14sp"
             android:id="@+id/task_description"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="50dp"
+
             />
 
     </LinearLayout>
