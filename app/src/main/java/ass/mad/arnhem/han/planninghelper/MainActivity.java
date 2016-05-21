@@ -1,6 +1,9 @@
 package ass.mad.arnhem.han.planninghelper;
 
+<<<<<<< HEAD
 import android.app.Fragment;
+=======
+>>>>>>> 1b51f83584399b47d98841c9288f6e4d65fe183c
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -13,6 +16,8 @@ import android.view.MenuItem;
 import net.yanzm.mth.MaterialTabHost;
 
 import java.util.Calendar;
+
+import ass.mad.arnhem.han.planninghelper.users.userActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, userActivity.class));
             return true;
         }
 

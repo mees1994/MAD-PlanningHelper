@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ass.mad.arnhem.han.planninghelper">
+    package="ass.mad.arnhem.han.planninghelper" >
+
+    <!-- Internet Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".PlanningApplication"
@@ -8,11 +12,11 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,14 +25,38 @@
         </activity>
         <activity android:name=".CreateTaskActivity" />
         <activity
+<<<<<<< HEAD
             android:name=".DetailTaskActivity"
             android:label="@string/title_activity_detail_task"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
+=======
+            android:name=".users.userActivity"
+            android:label="@string/title_activity_user" >
+>>>>>>> 1b51f83584399b47d98841c9288f6e4d65fe183c
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ass.mad.arnhem.han.planninghelper.MainActivity" />
         </activity>
+<<<<<<< HEAD
+=======
+        <activity
+            android:name=".users.createUserActivity"
+            android:label="@string/title_activity_create_user"
+            android:parentActivityName=".users.userActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ass.mad.arnhem.han.planninghelper.MainActivity" />
+        </activity>
+        <activity
+            android:name=".users.zoekVriendenActivity"
+            android:label="@string/title_activity_zoek_vrienden"
+            android:parentActivityName=".users.userActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ass.mad.arnhem.han.planninghelper.users.userActivity" />
+        </activity>
+>>>>>>> 1b51f83584399b47d98841c9288f6e4d65fe183c
     </application>
 
 </manifest>

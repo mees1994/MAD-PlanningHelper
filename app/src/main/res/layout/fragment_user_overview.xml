@@ -1,0 +1,111 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="ass.mad.arnhem.han.planninghelper.users.userActivityFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="24dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <ImageView android:src="@drawable/ic_person_outline_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="72dp"
+            android:layout_marginBottom="12dp"
+            android:layout_gravity="center_horizontal" />
+
+        <!--  Gebruikersnaam Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gebruikersnaam:"
+            android:id="@+id/gebruikersnaamLabel"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textAlignment="center"/>
+        <!--  Gebruikersnaam -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/overviewGebruikersnaam"
+            android:textAlignment="center" />
+
+        <!--  Voornaam Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Voornaam:"
+            android:id="@+id/voornaamLabel"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textAlignment="center"/>
+        <!--  Voornaam -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/overviewVoornaam"
+            android:textAlignment="center"/>
+
+        <!--  Achternaam Label -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Achternaam:"
+            android:id="@+id/achternaamLabel"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textAlignment="center"/>
+
+        <!--  Achternaam -->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/overviewAchternaam"
+            android:textAlignment="center"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Vrienden:"
+            android:id="@+id/textView"
+            android:layout_gravity="center_horizontal" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listViewVrienden"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="91dp"
+            android:layout_height="wrap_content"
+            android:text="Zoek vrienden"
+            android:id="@+id/buttonZoekVrienden"
+            android:textSize="10dp"
+            android:layout_gravity="center_horizontal" />
+
+
+    </LinearLayout>
+    <!--  Sample Dashboard screen with Two buttons -->
+    <!--  Button to view all products screen
+    <Button android:id="@+id/btnCreateUser"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Maak gebruiker aan"
+        android:layout_marginTop="25dip"/> -->
+
+
+
+</ScrollView>
