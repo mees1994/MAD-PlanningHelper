@@ -33,6 +33,14 @@
                 android:value="ass.mad.arnhem.han.planninghelper.MainActivity" />
         </activity>
         <activity
+            android:name=".users.userActivity"
+            android:label="@string/title_activity_user"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ass.mad.arnhem.han.planninghelper.MainActivity" />
+        </activity>
+        <activity
             android:name=".users.createUserActivity"
             android:label="@string/title_activity_create_user"
             android:parentActivityName=".users.userActivity" >
