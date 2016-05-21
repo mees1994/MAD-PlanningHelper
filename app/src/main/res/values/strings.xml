@@ -1,13 +1,9 @@
 <resources>
     <string name="app_name">Planning helper</string>
-<<<<<<< HEAD
-    <string name="action_settings">Settings</string>
     <string name="title_activity_detail_task">DetailTaskActivity</string>
-=======
     <string name="action_settings">Vrienden overzicht</string>
     <string name="title_activity_user">Gebruikers</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_create_user">createUserActivity</string>
     <string name="title_activity_zoek_vrienden">Zoek vrienden</string>
->>>>>>> 1b51f83584399b47d98841c9288f6e4d65fe183c
 </resources>

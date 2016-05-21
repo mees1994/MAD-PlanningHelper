@@ -25,21 +25,13 @@
         </activity>
         <activity android:name=".CreateTaskActivity" />
         <activity
-<<<<<<< HEAD
             android:name=".DetailTaskActivity"
-            android:label="@string/title_activity_detail_task"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-=======
-            android:name=".users.userActivity"
-            android:label="@string/title_activity_user" >
->>>>>>> 1b51f83584399b47d98841c9288f6e4d65fe183c
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ass.mad.arnhem.han.planninghelper.MainActivity" />
         </activity>
-<<<<<<< HEAD
-=======
         <activity
             android:name=".users.createUserActivity"
             android:label="@string/title_activity_create_user"
@@ -56,7 +48,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ass.mad.arnhem.han.planninghelper.users.userActivity" />
         </activity>
->>>>>>> 1b51f83584399b47d98841c9288f6e4d65fe183c
     </application>
 
 </manifest>
