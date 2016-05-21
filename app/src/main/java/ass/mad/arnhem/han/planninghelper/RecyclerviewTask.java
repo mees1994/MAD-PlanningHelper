@@ -7,10 +7,10 @@ import android.graphics.Bitmap;
  */
 public class RecyclerviewTask {
 
-    private Bitmap icon;
+    private int icon;
     private String taskTitle, taskDescription, startTime, endTime;
 
-    public RecyclerviewTask(String taskTitle, String taskDescription, String startTime, String endTime, Bitmap icon) {
+    public RecyclerviewTask(String taskTitle, String taskDescription, String startTime, String endTime, int icon) {
         this.taskTitle = taskTitle;
         this.taskDescription = taskDescription;
         this.startTime = startTime;
@@ -22,7 +22,7 @@ public class RecyclerviewTask {
         return taskTitle;
     }
 
-    public Bitmap getIcon() {
+    public int getIcon() {
         return icon;
     }
 

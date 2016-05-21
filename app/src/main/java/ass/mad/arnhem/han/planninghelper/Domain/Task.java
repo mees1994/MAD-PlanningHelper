@@ -12,10 +12,10 @@ public class Task {
     private int taskId;
     private String titel, description;
     private String startTime, endTime;
-    private Bitmap icon;
+    private int icon;
     private boolean showGPS;
 
-    public Task(int taskId, String titel, String description, String startTime, String endTime, Bitmap icon, boolean showGPS) {
+    public Task(int taskId, String titel, String description, String startTime, String endTime, int icon, boolean showGPS) {
         this.taskId = taskId;
         this.titel = titel;
         this.description = description;
@@ -45,7 +45,7 @@ public class Task {
         return endTime;
     }
 
-    public Bitmap getIcon() {
+    public int getIcon() {
         return icon;
     }
 

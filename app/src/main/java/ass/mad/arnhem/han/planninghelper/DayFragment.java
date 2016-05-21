@@ -69,7 +69,7 @@ public class DayFragment extends Fragment {
         initView(v);
 
         for (Task task: tasks) {
-            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), null));
+            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), task.getIcon()));
         }
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -119,7 +119,7 @@ public class DayFragment extends Fragment {
         taskAdapter.clearItems();
 
         for (Task task: tasks) {
-            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), null));
+            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), task.getIcon()));
         }
     }
 
