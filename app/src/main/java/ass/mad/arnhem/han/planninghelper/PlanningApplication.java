@@ -36,7 +36,7 @@ public class PlanningApplication extends Application {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String currentTime = sdf.format(calendar.getTime());
         ArrayList<Task> tasks = new ArrayList<>();
-        tasks.add(new Task(1, "Kamer opruimen", "De kamer moet spiek en span zijn", currentTime, currentTime, null, false));
+        tasks.add(new Task(1, "Kamer opruimen", "De kamer moet spik en span zijn", currentTime, currentTime, null, false));
 
         ArrayList<Day> days = new ArrayList<>();
         days.add(new Day(calendar.SUNDAY, new ArrayList<Task>()));

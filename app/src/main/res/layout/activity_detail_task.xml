@@ -1,26 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context="ass.mad.arnhem.han.planninghelper.DetailTaskActivity">
+    android:orientation="vertical"
+    tools:context="ass.mad.arnhem.han.planninghelper.CreateTaskActivity"
+    android:layout_margin="16dp">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Title"
+        android:id="@+id/detailsTitle" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginRight="8dp"
+        android:text="Description:"
+        android:layout_below="@+id/detailsTitle"
+        android:id="@+id/detailsDescriptionLabel" />
 
-    </android.support.design.widget.AppBarLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="*desc*"
+        android:layout_toRightOf="@+id/detailsDescriptionLabel"
+        android:layout_alignBottom="@+id/detailsDescriptionLabel"
+        android:id="@+id/detailsDescription" />
 
-    <include layout="@layout/content_detail_task" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Date:"
+        android:layout_below="@+id/detailsDescriptionLabel"
+        android:id="@+id/detailsDateLabel" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="*Date*"
+        android:layout_toRightOf="@+id/detailsDescriptionLabel"
+        android:layout_alignBottom="@+id/detailsDateLabel"
+        android:id="@+id/detailsDate" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="From:"
+        android:layout_below="@id/detailsDate"
+        android:id="@+id/detailsStartTimeLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="startTime"
+        android:layout_toRightOf="@+id/detailsDescriptionLabel"
+        android:layout_alignBottom="@+id/detailsStartTimeLabel"
+        android:id="@+id/detailsStartTime" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Till:"
+        android:layout_below="@+id/detailsStartTimeLabel"
+        android:id="@+id/detailsEndTimeLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="endTime"
+        android:layout_toRightOf="@+id/detailsDescriptionLabel"
+        android:layout_alignBottom="@+id/detailsEndTimeLabel"
+        android:id="@+id/detailsEndTime" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Duration:"
+        android:layout_below="@+id/detailsEndTimeLabel"
+        android:id="@+id/detailsDurationLabel" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="duration"
+        android:layout_toRightOf="@+id/detailsDescriptionLabel"
+        android:layout_alignBottom="@+id/detailsDurationLabel"
+        android:id="@+id/detailsDuration" />
+
+</RelativeLayout>
