@@ -17,20 +17,17 @@ import java.util.List;
  */
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> {
 
-    private static final int MOVIE_DETAIL = 0;
-    private static final int MOVIE_VIDEO = 1;
-    private static final int MOVIE_REVIEW = 2;
-    private static final int MOVIE_DETAIL_SECTION_HEADER = 3;
-    private final static String BASE_URL = "http://image.tmdb.org/t/p/w185/";
     int dayNumber;
 
     private LayoutInflater inflater;
     private Context context;
     private List<RecyclerviewTask> items = new ArrayList<>();
+    private ItemSelectedListener itemSelectedListener;
 
-    public TaskAdapter(Context context) {
+    public TaskAdapter(Context context, ItemSelectedListener listener) {
         inflater = LayoutInflater.from(context);
         this.context = context;
+        itemSelectedListener = listener;
     }
 
     public void clearItems() {
@@ -53,7 +50,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(final myViewHolder holder, int position) {
+    public void onBindViewHolder(final myViewHolder holder, final int position) {
         final RecyclerviewTask current = items.get(position);
 
         holder.taskTitle.setText(current.getTaskTitle());
@@ -64,7 +61,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {Log.e("TaskAdapter", current.getTaskTitle());
+            public void onClick(View v) {
+                itemSelectedListener.onIconSelected(position);
             }
         });
 
