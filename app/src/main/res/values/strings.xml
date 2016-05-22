@@ -6,4 +6,22 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_create_user">createUserActivity</string>
     <string name="title_activity_zoek_vrienden">Zoek vrienden</string>
+    <string name="details_description_label_text">Omschrijving:</string>
+    <string name="details_date_label_text">Datum:</string>
+    <string name="details_starttime_label_text">Van:</string>
+    <string name="details_endtime_label_text">Tot:</string>
+    <string name="details_duration_label_text">Tijdsduur:</string>
+
+    <array name="icon_list">
+        <item>Custom</item>
+        <item>Book</item>
+        <item>Cooking</item>
+        <item>Pet</item>
+        <item>Sport</item>
+        <item>Health</item>
+        <item>Fix</item>
+        <item>Cleaning</item>
+        <item>Washing</item>
+        <item>Gym</item>
+    </array>
 </resources>

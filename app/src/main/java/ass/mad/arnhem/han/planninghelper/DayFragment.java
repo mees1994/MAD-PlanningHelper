@@ -4,15 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -27,7 +23,7 @@ import ass.mad.arnhem.han.planninghelper.Domain.Week;
 /**
  * Created by Mees on 5/17/2016.
  */
-public class DayFragment extends Fragment {
+public class DayFragment extends Fragment implements ItemSelectedListener {
 
     int mNum;
     int mWeekNr;
@@ -68,8 +64,9 @@ public class DayFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_day_pager, container, false);
         initView(v);
 
+        taskAdapter.dayNumber = mNum;
         for (Task task: tasks) {
-            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), null));
+            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), task.getIcon()));
         }
         recyclerView.setAdapter(taskAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -91,7 +88,7 @@ public class DayFragment extends Fragment {
         dateTextView = v.findViewById(R.id.text);
         createTaskBtn = (FloatingActionButton) v.findViewById(R.id.create_task_fab);// v.findViewById(R.id.create_task_fab);
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerview_tasks);
-        taskAdapter = new TaskAdapter(getContext());
+        taskAdapter = new TaskAdapter(getContext(), this);
 
         week = PlanningApplication.getInstance().getWeek();
         currentDay = week.getDays().get(mNum);
@@ -119,9 +116,16 @@ public class DayFragment extends Fragment {
         taskAdapter.clearItems();
 
         for (Task task: tasks) {
-            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), null));
+            taskAdapter.addItem(new RecyclerviewTask(task.getTitel(), task.getDescription(), task.getStartTime().toString(), task.getEndTime().toString(), task.getIcon()));
         }
     }
 
 
+    @Override
+    public void onIconSelected(int pos) {
+        Intent intent = new Intent(getActivity(), DetailTaskActivity.class);
+        intent.putExtra("dayNr", mNum);
+        intent.putExtra("taskNr", pos);
+        startActivity(intent);
+    }
 }

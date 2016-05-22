@@ -1,41 +1,33 @@
 package ass.mad.arnhem.han.planninghelper;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by Mees on 5/17/2016.
  */
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> {
 
-    private static final int MOVIE_DETAIL = 0;
-    private static final int MOVIE_VIDEO = 1;
-    private static final int MOVIE_REVIEW = 2;
-    private static final int MOVIE_DETAIL_SECTION_HEADER = 3;
-    private final static String BASE_URL = "http://image.tmdb.org/t/p/w185/";
+    int dayNumber;
 
     private LayoutInflater inflater;
     private Context context;
     private List<RecyclerviewTask> items = new ArrayList<>();
+    private ItemSelectedListener itemSelectedListener;
 
-    public TaskAdapter(Context context) {
+    public TaskAdapter(Context context, ItemSelectedListener listener) {
         inflater = LayoutInflater.from(context);
         this.context = context;
+        itemSelectedListener = listener;
     }
 
     public void clearItems() {
@@ -58,13 +50,21 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(final myViewHolder holder, int position) {
+    public void onBindViewHolder(final myViewHolder holder, final int position) {
         final RecyclerviewTask current = items.get(position);
 
         holder.taskTitle.setText(current.getTaskTitle());
         holder.taskDescription.setText(current.getTaskDescription());
         holder.startTime.setText(current.getStartTime());
         holder.endTime.setText(current.getEndTime());
+        holder.icon.setImageDrawable(context.getDrawable(current.getIcon()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemSelectedListener.onIconSelected(position);
+            }
+        });
 
     }
 
@@ -99,6 +99,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.myViewHolder> 
             startTime = (TextView) itemView.findViewById(R.id.task_start_time);
             endTime = (TextView) itemView.findViewById(R.id.task_end_time);
 
+            icon = (ImageView) itemView.findViewById(R.id.task_icon);
         }
     }
 }
