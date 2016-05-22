@@ -59,7 +59,7 @@ public class userActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
 
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("PlanningHelper", Context.MODE_PRIVATE);
         String gebruikersnaam = sharedPref.getString("gebruikersnaam", "nousername");
         String voornaam = sharedPref.getString("voornaam","novoornaame");
         String achternaam = sharedPref.getString("achternaam","noachternaam");
@@ -77,6 +77,12 @@ public class userActivity extends AppCompatActivity {
             textVoornaam.setText(voornaam);
             textAchternaam.setText(achternaam);
         }
+
+        //TODO laad vriendjes met punten en verwijderen
+
+        String UsernameID = sharedPref.getString("usernameid", "555");
+        Log.d("useractif",UsernameID);
+
 
         btnCreateUser = (Button) findViewById(R.id.buttonZoekVrienden);
 
@@ -168,7 +174,18 @@ public class userActivity extends AppCompatActivity {
                     resultProduct[0] = product.getString(TAG_GEBRUIKERSNAAM);
                     resultProduct[1] = product.getString(TAG_VOORNAAM);
                     resultProduct[2] = product.getString(TAG_ACHTERNAAM);
+
                     Log.d("result",  product.getString(TAG_GEBRUIKERSNAAM));
+
+                    SharedPreferences sharedPref = getSharedPreferences("PlanningHelper", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString("gebruikersnaam", product.getString(TAG_GEBRUIKERSNAAM));
+                    editor.putString("voornaam",product.getString(TAG_VOORNAAM));
+                    editor.putString("achternaam", product.getString(TAG_ACHTERNAAM));
+                    editor.putString("usernameid",  product.getString("ID"));
+                    editor.putString("punten",  product.getString("Punten"));
+                    editor.apply();
+
                     return resultProduct;
 
                 }else{

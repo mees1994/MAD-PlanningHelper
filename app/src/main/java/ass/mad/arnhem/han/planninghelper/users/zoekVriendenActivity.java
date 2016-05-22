@@ -1,6 +1,8 @@
 package ass.mad.arnhem.han.planninghelper.users;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -112,9 +114,17 @@ public class zoekVriendenActivity extends AppCompatActivity {
             try {
                 String android_id = Settings.Secure.getString(getContentResolver(),
                         Settings.Secure.ANDROID_ID);
+
+                SharedPreferences sharedPref = getSharedPreferences("PlanningHelper", Context.MODE_PRIVATE);
+                String UsernameID = sharedPref.getString("usernameid", "555");
+
+                Log.d("zoekvriendjes",android_id);
+                Log.d("zoekvriendjes",UsernameID);
+
                 // Building Parameters
                 List<NameValuePair> paramsGet = new ArrayList<NameValuePair>();
                 paramsGet.add(new BasicNameValuePair(TAG_android_id, android_id));
+                paramsGet.add(new BasicNameValuePair("UsernameID", UsernameID));
 
                 // getting product details by making HTTP request
                 // Note that product details url will use GET request
@@ -123,7 +133,6 @@ public class zoekVriendenActivity extends AppCompatActivity {
 
                 // check your log for json response
                 Log.d("All user Details", json.toString());
-
                 // json success tag
                 success = json.getInt(TAG_SUCCESS);
                 if (success == 1) {
@@ -155,57 +164,56 @@ public class zoekVriendenActivity extends AppCompatActivity {
         protected void onPostExecute(JSONArray peoples) {
             // dismiss the dialog once got all details
             pDialog.dismiss();
+            if(peoples != null) {
+                for (int i = 0; i < peoples.length(); i++) {
+                    JSONObject c = peoples.optJSONObject(i);
+                    String userID = c.optString(TAG_ID);
+                    String gebruikersnaam = c.optString(TAG_GEBUIKERSNAAM);
+                    String voornaam = c.optString(TAG_VOORNAAM);
+                    String achternaam = c.optString(TAG_ACHTERNAAM);
+                    String punten = c.optString(TAG_PUNTEN);
 
-            for(int i=0;i<peoples.length();i++){
-                JSONObject c = peoples.optJSONObject(i);
-                String userID = c.optString(TAG_ID);
-                String gebruikersnaam = c.optString(TAG_GEBUIKERSNAAM);
-                String voornaam = c.optString(TAG_VOORNAAM);
-                String achternaam = c.optString(TAG_ACHTERNAAM);
-                String punten = c.optString(TAG_PUNTEN);
+                    HashMap<String, String> persons = new HashMap<String, String>();
 
-                HashMap<String,String> persons = new HashMap<String,String>();
+                    persons.put(TAG_ID, userID);
+                    persons.put(TAG_GEBUIKERSNAAM, gebruikersnaam);
+                    persons.put(TAG_VOORNAAM, voornaam);
+                    persons.put(TAG_ACHTERNAAM, achternaam);
+                    persons.put(TAG_PUNTEN, punten);
 
-                persons.put(TAG_ID,userID);
-                persons.put(TAG_GEBUIKERSNAAM,gebruikersnaam);
-                persons.put(TAG_VOORNAAM,voornaam);
-                persons.put(TAG_ACHTERNAAM,achternaam);
-                persons.put(TAG_PUNTEN,punten);
+                    personList.add(persons);
+                }
 
-                personList.add(persons);
+                zoekVriendenListAdapter = new zoekVriendenListAdapter(getBaseContext(), personList);
+                ListView list = (ListView) findViewById(R.id.listviewZoekVrienden);
+                list.setAdapter(zoekVriendenListAdapter);
+
+                // Locate the EditText in listview_main.xml
+                editsearch = (EditText) findViewById(R.id.search);
+
+                // Capture Text in EditText
+                editsearch.addTextChangedListener(new TextWatcher() {
+
+                    @Override
+                    public void afterTextChanged(Editable arg0) {
+                        // TODO Auto-generated method stub
+                        String text = editsearch.getText().toString().toLowerCase(Locale.getDefault());
+                        zoekVriendenListAdapter.filtertext(text);
+                    }
+
+                    @Override
+                    public void beforeTextChanged(CharSequence arg0, int arg1,
+                                                  int arg2, int arg3) {
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+                                              int arg3) {
+                        // TODO Auto-generated method stub
+                    }
+                });
             }
-
-            Log.d("test",personList.toString());
-
-            zoekVriendenListAdapter = new zoekVriendenListAdapter(getBaseContext(),personList);
-            ListView list = (ListView) findViewById(R.id.listviewZoekVrienden);
-            list.setAdapter(zoekVriendenListAdapter);
-
-            // Locate the EditText in listview_main.xml
-            editsearch = (EditText) findViewById(R.id.search);
-
-            // Capture Text in EditText
-            editsearch.addTextChangedListener(new TextWatcher() {
-
-                @Override
-                public void afterTextChanged(Editable arg0) {
-                    // TODO Auto-generated method stub
-                    String text = editsearch.getText().toString().toLowerCase(Locale.getDefault());
-                    zoekVriendenListAdapter.filtertext(text);
-                }
-
-                @Override
-                public void beforeTextChanged(CharSequence arg0, int arg1,
-                                              int arg2, int arg3) {
-                    // TODO Auto-generated method stub
-                }
-
-                @Override
-                public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-                                          int arg3) {
-                    // TODO Auto-generated method stub
-                }
-            });
 
         }
 

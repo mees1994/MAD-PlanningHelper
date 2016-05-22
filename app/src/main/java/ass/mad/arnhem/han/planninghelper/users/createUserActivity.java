@@ -1,17 +1,18 @@
 package ass.mad.arnhem.han.planninghelper.users;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -48,6 +49,35 @@ public class createUserActivity extends AppCompatActivity {
         inputGebruikersnaam = (EditText) findViewById(R.id.inputGebruikersnaam);
         inputVoornaam = (EditText) findViewById(R.id.inputVoornaam);
         inputAchternaam = (EditText) findViewById(R.id.inputAchternaam);
+
+        inputGebruikersnaam.addTextChangedListener(new TextValidator(inputGebruikersnaam) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if( text.length() == 0 )
+                    textView.setError( "Gebruikersnaam benodigd!" );
+            }
+        });
+        inputVoornaam.addTextChangedListener(new TextValidator(inputVoornaam) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if( text.length() == 0 )
+                    textView.setError( "Voornaam benodigd!" );
+                if (text.matches(".*\\d+.*")) {
+                    textView.setError("Alleen letters!");
+                }
+            }
+        });
+        inputAchternaam.addTextChangedListener(new TextValidator(inputAchternaam) {
+            @Override
+            public void validate(TextView textView, String text) {
+                if( text.length() == 0 ) {
+                    textView.setError("Achternaam benodigd!");
+                }
+                if (text.matches(".*\\d+.*")) {
+                    textView.setError("Alleen letters!");
+                }
+            }
+        });
 
         // Create button
         Button btnCreateProduct = (Button) findViewById(R.id.btnCreateProduct);
@@ -114,16 +144,14 @@ public class createUserActivity extends AppCompatActivity {
             try {
                 int success = json.getInt(TAG_SUCCESS);
                 String message = json.getString("message");
-                Log.d("test",message);
+                Log.d("createUserActivity",message);
 
                 if (success == 1) {
-
-                    SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString("gebruikersnaam", gebruikersnaam);
-                    editor.putString("voornaam",voornaam);
-                    editor.putString("achternaam",achternaam);
-                    editor.commit();
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                     // successfully created product
                     Intent i = new Intent(getApplicationContext(), userActivity.class);
@@ -149,5 +177,28 @@ public class createUserActivity extends AppCompatActivity {
             pDialog.dismiss();
         }
 
+    }
+
+    public abstract class TextValidator implements TextWatcher {
+        private final TextView textView;
+
+        public TextValidator(TextView textView) {
+            this.textView = textView;
+        }
+
+        public abstract void validate(TextView textView, String text);
+
+        @Override
+        final public void afterTextChanged(Editable s) {
+            Log.d("aftertext","test");
+            String text = textView.getText().toString();
+            validate(textView, text);
+        }
+
+        @Override
+        final public void beforeTextChanged(CharSequence s, int start, int count, int after) { /* Don't care */ }
+
+        @Override
+        final public void onTextChanged(CharSequence s, int start, int before, int count) { /* Don't care */ }
     }
 }
