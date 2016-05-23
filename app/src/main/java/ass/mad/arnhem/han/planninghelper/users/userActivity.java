@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.apache.http.NameValuePair;
@@ -35,10 +36,9 @@ public class userActivity extends AppCompatActivity {
     // Creating JSON Parser object
     JSONParser jsonParser = new JSONParser();
 
-    ArrayList<HashMap<String, String>> productsList;
-
     // url to get all products list
     private static String url_get_user_by_id = "http://www.peterotten.com/AndroidProject/get_user_by_id.php";
+    private static String url_get_friends_by_id = "http://www.peterotten.com/AndroidProject/get_friends_by_id.php";
 
     // JSON Node names
     private static final String TAG_SUCCESS = "success";
@@ -48,11 +48,16 @@ public class userActivity extends AppCompatActivity {
     private static final String TAG_GEBRUIKERSNAAM = "Gebruikersnaam";
     private static final String TAG_VOORNAAM = "Voornaam";
     private static final String TAG_ACHTERNAAM = "Achternaam";
+    private static final String TAG_ID ="ID";
+    private static final String TAG_PUNTEN ="Punten";
 
     // products JSONArray
     JSONArray products = null;
-
     Button btnCreateUser;
+
+    vriendenOverzichtAdapter vriendenOverzichtAdapter;
+    JSONArray peoples = null;
+    ArrayList<HashMap<String, String>> personList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +84,8 @@ public class userActivity extends AppCompatActivity {
         }
 
         //TODO laad vriendjes met punten en verwijderen
-
-        String UsernameID = sharedPref.getString("usernameid", "555");
-        Log.d("useractif",UsernameID);
+        //personList = new ArrayList<HashMap<String,String>>();
+        //new findFriends().execute();
 
 
         btnCreateUser = (Button) findViewById(R.id.buttonZoekVrienden);
@@ -120,6 +124,13 @@ public class userActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        personList = new ArrayList<HashMap<String,String>>();
+        new findFriends().execute();
     }
 
     /**
@@ -221,6 +232,108 @@ public class userActivity extends AppCompatActivity {
 
             // dismiss the dialog once got all details
             pDialog.dismiss();
+        }
+
+    }
+
+    /**
+     * Background Async Task to Load the user by making HTTP Request
+     * */
+    class findFriends extends AsyncTask<String, String, JSONArray> {
+
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(userActivity.this);
+            pDialog.setMessage("Loading friends. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        /**
+         * Getting user details in background thread
+         * */
+        protected JSONArray doInBackground(String... params) {
+
+            int success;
+            try {
+
+                SharedPreferences sharedPref = getSharedPreferences("PlanningHelper", Context.MODE_PRIVATE);
+                String UsernameID = sharedPref.getString("usernameid", "555");
+
+                Log.d("vriendenoverzicht",UsernameID);
+
+                // Building Parameters
+                List<NameValuePair> paramsGet = new ArrayList<NameValuePair>();
+                paramsGet.add(new BasicNameValuePair("UsernameID", UsernameID));
+
+                // getting product details by making HTTP request
+                // Note that product details url will use GET request
+                JSONObject json = jsonParser.makeHttpRequest(
+                        url_get_friends_by_id, "GET", paramsGet);
+
+                // check your log for json response
+                Log.d("All user Details", json.toString());
+                // json success tag
+                success = json.getInt(TAG_SUCCESS);
+                if (success == 1) {
+                    // successfully received product details
+                    JSONArray productObj = json
+                            .getJSONArray(TAG_USER); // JSON Array
+
+                    // get first product object from JSON Array
+                    peoples = productObj.getJSONArray(0);
+
+                    //HashMap<String,String> persons = new HashMap<String,String>();
+                    //resultProduct[0] = product.(TAG_USERSARRAY);
+
+                    return peoples;
+
+                }else{
+                    //nothing found
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return peoples;
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(JSONArray peoples) {
+            // dismiss the dialog once got all details
+            pDialog.dismiss();
+            if(peoples != null) {
+                for (int i = 0; i < peoples.length(); i++) {
+                    JSONObject c = peoples.optJSONObject(i);
+                    String userID = c.optString(TAG_ID);
+                    String gebruikersnaam = c.optString(TAG_GEBRUIKERSNAAM);
+                    String voornaam = c.optString(TAG_VOORNAAM);
+                    String achternaam = c.optString(TAG_ACHTERNAAM);
+                    String punten = c.optString(TAG_PUNTEN);
+
+                    HashMap<String, String> persons = new HashMap<String, String>();
+
+                    persons.put(TAG_ID, userID);
+                    persons.put(TAG_GEBRUIKERSNAAM, gebruikersnaam);
+                    persons.put(TAG_VOORNAAM, voornaam);
+                    persons.put(TAG_ACHTERNAAM, achternaam);
+                    persons.put(TAG_PUNTEN, punten);
+
+                    personList.add(persons);
+                }
+                Log.d("aantal",personList.toString());
+                vriendenOverzichtAdapter = new vriendenOverzichtAdapter(getBaseContext(), personList);
+                final ListView list = (ListView) findViewById(R.id.listViewVrienden);
+                list.setAdapter(vriendenOverzichtAdapter);
+            }
+
         }
 
     }

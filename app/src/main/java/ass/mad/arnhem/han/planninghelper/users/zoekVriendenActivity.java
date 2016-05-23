@@ -40,7 +40,7 @@ public class zoekVriendenActivity extends AppCompatActivity {
 
     private static String url_get_all_but_user = "http://www.peterotten.com/AndroidProject/get_all_but_user.php";
 
-    private static final String TAG_GEBUIKERSNAAM="Gebruikersnaam";
+    private static final String TAG_GEBRUIKERSNAAM ="Gebruikersnaam";
     private static final String TAG_VOORNAAM = "Voornaam";
     private static final String TAG_ACHTERNAAM = "Achternaam";
     private static final String TAG_PUNTEN ="Punten";
@@ -168,7 +168,7 @@ public class zoekVriendenActivity extends AppCompatActivity {
                 for (int i = 0; i < peoples.length(); i++) {
                     JSONObject c = peoples.optJSONObject(i);
                     String userID = c.optString(TAG_ID);
-                    String gebruikersnaam = c.optString(TAG_GEBUIKERSNAAM);
+                    String gebruikersnaam = c.optString(TAG_GEBRUIKERSNAAM);
                     String voornaam = c.optString(TAG_VOORNAAM);
                     String achternaam = c.optString(TAG_ACHTERNAAM);
                     String punten = c.optString(TAG_PUNTEN);
@@ -176,7 +176,7 @@ public class zoekVriendenActivity extends AppCompatActivity {
                     HashMap<String, String> persons = new HashMap<String, String>();
 
                     persons.put(TAG_ID, userID);
-                    persons.put(TAG_GEBUIKERSNAAM, gebruikersnaam);
+                    persons.put(TAG_GEBRUIKERSNAAM, gebruikersnaam);
                     persons.put(TAG_VOORNAAM, voornaam);
                     persons.put(TAG_ACHTERNAAM, achternaam);
                     persons.put(TAG_PUNTEN, punten);
