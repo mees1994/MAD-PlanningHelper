@@ -88,8 +88,7 @@ public class CreateTaskActivity extends AppCompatActivity implements View.OnClic
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay,
                                               int minute) {
-
-                            txtStartTime.setText(hourOfDay + ":" + minute);
+                            txtStartTime.setText(needsLeadingZero(hourOfDay) + hourOfDay + ":" + needsLeadingZero(minute) + minute);
                         }
                     }, mHour, mMinute, false);
             timePickerDialog.show();
@@ -109,7 +108,7 @@ public class CreateTaskActivity extends AppCompatActivity implements View.OnClic
                         public void onTimeSet(TimePicker view, int hourOfDay,
                                               int minute) {
 
-                            txtEndTime.setText(hourOfDay + ":" + minute);
+                            txtEndTime.setText(needsLeadingZero(hourOfDay) + hourOfDay + ":" + needsLeadingZero(minute) + minute);
                         }
                     }, mHour, mMinute, false);
             timePickerDialog.show();
@@ -175,5 +174,13 @@ public class CreateTaskActivity extends AppCompatActivity implements View.OnClic
             return true;
         }
         return false;
+    }
+
+    private String needsLeadingZero(int value){
+        String leadingZero = "";
+        if (value <= 9){
+            leadingZero = "0";
+        }
+        return leadingZero;
     }
 }

@@ -125,7 +125,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/detailsTaskDoneLabel"
             android:layout_centerVertical="true"
-            android:text="Taak voltooit: "/>
+            android:text="Taak voltooid: "/>
 
         <CheckBox
             android:layout_width="wrap_content"

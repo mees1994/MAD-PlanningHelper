@@ -53,18 +53,21 @@ public class DetailTaskActivity extends AppCompatActivity {
         startTime.setText(task.getStartTime());
         endTime.setText(task.getEndTime());
         icon.setImageDrawable(getDrawable(task.getIcon()));
-
+        
         Date dStartTime = new Date();
         Date dEndTime = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+        Log.e("DetailTaskActivity", task.getStartTime());
+        Log.e("DetailTaskActivity", task.getEndTime());
         try {
             dStartTime = dateFormat.parse(task.getStartTime());
             dEndTime = dateFormat.parse(task.getEndTime());
         } catch (ParseException e) {
             Log.e("DetailsTaskActivity", "Error while paring date" + e);
         }
-        long durationAmount = dEndTime.getTime() - dStartTime.getTime();
-        duration.setText(durationAmount + "");
+        long durationAmount = (dEndTime.getTime() - dStartTime.getTime());
+        Log.e("DetailTaskActivity", String.valueOf(durationAmount));
+        duration.setText(String.valueOf(durationAmount));
 
     }
 
