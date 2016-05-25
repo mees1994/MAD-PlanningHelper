@@ -7,7 +7,13 @@
     tools:context="ass.mad.arnhem.han.planninghelper.CreateTaskActivity"
     android:layout_margin="16dp">
 
+    <ImageView
+        android:id="@+id/detailIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <TextView
+        android:layout_toRightOf="@id/detailIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -20,7 +26,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginRight="8dp"
         android:text="Description:"
-        android:layout_below="@+id/detailsTitle"
+        android:layout_below="@+id/detailIcon"
         android:id="@+id/detailsDescriptionLabel" />
 
     <TextView
@@ -29,7 +35,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="*desc*"
         android:layout_toRightOf="@+id/detailsDescriptionLabel"
-        android:layout_alignBottom="@+id/detailsDescriptionLabel"
+        android:layout_alignTop="@+id/detailsDescriptionLabel"
         android:id="@+id/detailsDescription" />
 
     <TextView
@@ -37,7 +43,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Date:"
-        android:layout_below="@+id/detailsDescriptionLabel"
+        android:layout_below="@+id/detailsDescription"
         android:id="@+id/detailsDateLabel" />
 
     <TextView
