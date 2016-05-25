@@ -15,8 +15,9 @@ public class Task {
     private String startTime, endTime;
     private int icon;
     private boolean showGPS;
+    private Bitmap picture;
 
-    public Task(int taskId, String titel, String description, String startTime, String endTime, int icon, boolean showGPS) {
+    public Task(int taskId, String titel, String description, String startTime, String endTime, int icon, boolean showGPS, Bitmap picture) {
         this.taskId = taskId;
         this.titel = titel;
         this.description = description;
@@ -24,6 +25,7 @@ public class Task {
         this.endTime = endTime;
         this.icon = icon;
         this.showGPS = showGPS;
+        this.picture = picture;
     }
 
     public int getTaskId() {
@@ -53,4 +55,13 @@ public class Task {
     public boolean isShowGPS() {
         return showGPS;
     }
+
+    public Bitmap getPicture() {
+        return picture;
+    }
+
+    public void setPicture(Bitmap picture) {
+        this.picture = picture;
+    }
+
 }

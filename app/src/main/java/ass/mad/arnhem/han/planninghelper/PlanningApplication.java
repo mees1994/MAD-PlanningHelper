@@ -37,7 +37,7 @@ public class PlanningApplication extends Application {
         String currentTime = sdf.format(calendar.getTime());
         ArrayList<Task> tasks = new ArrayList<>();
 
-        tasks.add(new Task(1, "Kamer opruimen", "De kamer moet spik en span zijn", currentTime, currentTime, R.drawable.list, false));
+        tasks.add(new Task(1, "Kamer opruimen", "De kamer moet spik en span zijn", currentTime, currentTime, R.drawable.list, false, null));
 
         ArrayList<Day> days = new ArrayList<>();
         days.add(new Day(calendar.SUNDAY, new ArrayList<Task>()));

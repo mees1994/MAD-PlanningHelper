@@ -1,9 +1,9 @@
 package ass.mad.arnhem.han.planninghelper.users;
 
-
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -22,19 +21,18 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import ass.mad.arnhem.han.planninghelper.R;
 
 /**
- * Created by MOBO on 19-5-2016.
+ * Created by MOBO on 23-5-2016.
  */
-public class zoekVriendenListAdapter extends BaseAdapter {
+public class vriendenOverzichtAdapter extends BaseAdapter {
 
     // Progress Dialog
     private ProgressDialog pDialog;
     JSONParser jsonParser = new JSONParser();
-    private static String url_create_vriendlink = "http://www.peterotten.com/AndroidProject/create_vriendlink.php";
+    private static String url_create_vriendlink = "http://www.peterotten.com/AndroidProject/delete_friends.php";
 
     private ArrayList<HashMap<String, String>> personlist;
     private ArrayList<HashMap<String, String>> arraylist;
@@ -46,10 +44,11 @@ public class zoekVriendenListAdapter extends BaseAdapter {
     String UsernameID = "0";
 
     private static final String TAG_GEBUIKERSNAAM="Gebruikersnaam";
+    private static final String TAG_PUNTEN="Punten";
     private static final String TAG_ID ="ID";
     private static final String TAG_SUCCESS = "success";
 
-    public zoekVriendenListAdapter(Context context, ArrayList<HashMap<String, String>> personlist) {
+    public vriendenOverzichtAdapter(Context context, ArrayList<HashMap<String, String>> personlist) {
         mContext = context;
         inflater = (LayoutInflater)mContext.getSystemService
                 (Context.LAYOUT_INFLATER_SERVICE);
@@ -60,6 +59,7 @@ public class zoekVriendenListAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         private TextView gebruikersnaam;
+        private TextView punten;
     }
 
     @Override
@@ -81,73 +81,55 @@ public class zoekVriendenListAdapter extends BaseAdapter {
     public View getView(final int position, View view, ViewGroup parent) {
         if (view == null) {
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.listview_item_zoekvrienden, null);
+            view = inflater.inflate(R.layout.listview_item_listvrienden, null);
 
             // Locate the TextViews in listview_item.xml
-            holder.gebruikersnaam = (TextView) view.findViewById(R.id.vriendenZoekenGebruikersnaam);
+            holder.gebruikersnaam = (TextView) view.findViewById(R.id.listVriendenUsername);
+            holder.punten = (TextView) view.findViewById(R.id.listVriendenPunten);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
         // Set the results into TextViews
         holder.gebruikersnaam.setText(personlist.get(position).get(TAG_GEBUIKERSNAAM));
+        // Set the results into TextViews
+        holder.punten.setText(personlist.get(position).get(TAG_PUNTEN));
 
         // Listen for ListView Item Click
         view.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
-                String ID = personlist.get(position).get(TAG_ID);
-                new CreateNewFriendLink().execute(ID);
-                personlist.remove(position);
-                notifyDataSetChanged();
+                AlertDialog.Builder builder = new AlertDialog.Builder(arg0.getContext());
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                String ID = personlist.get(position).get(TAG_ID);
+                                new DeleteFriendLink().execute(ID);
+                                personlist.remove(position);
+                                notifyDataSetChanged();
+                                break;
 
-                CharSequence text = "Vriend toegevoegd!";
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast toast = Toast.makeText(arg0.getContext(), text, duration);
-                toast.show();
-//                // Send single item click data to SingleItemView Class
-//                Intent intent = new Intent(mContext, SingleItemView.class);
-//                // Pass all data rank
-//                intent.putExtra("rank",(worldpopulationlist.get(position).getRank()));
-//                // Pass all data country
-//                intent.putExtra("country",(worldpopulationlist.get(position).getCountry()));
-//                // Pass all data population
-//                intent.putExtra("population",(worldpopulationlist.get(position).getPopulation()));
-//                // Pass all data flag
-//                // Start SingleItemView Class
-//                mContext.startActivity(intent);
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                //No button clicked
+                                break;
+                        }
+                    }
+                };
+                builder.setMessage("Weet je zeker dat je "+ personlist.get(position).get(TAG_GEBUIKERSNAAM) +" wilt verwijderen?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
             }
         });
 
         return view;
     }
 
-    // Filter Class
-    public void filtertext(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        personlist.clear();
-        if (charText.length() == 0) {
-            personlist.addAll(arraylist);
-        }
-        else
-        {
-            for (HashMap<String, String> wp : arraylist)
-            {
-                if (wp.get(TAG_GEBUIKERSNAAM).toLowerCase(Locale.getDefault()).contains(charText))
-                {
-                    personlist.add(wp);
-                }
-            }
-        }
-        notifyDataSetChanged();
-    }
-
     /**
      * Background Async Task to Create new product
      * */
-    class CreateNewFriendLink extends AsyncTask<String, String, String> {
+    class DeleteFriendLink extends AsyncTask<String, String, String> {
 
         /**
          * Before starting background thread Show Progress Dialog
@@ -185,10 +167,7 @@ public class zoekVriendenListAdapter extends BaseAdapter {
                 Log.d("test",message);
 
                 if (success == 1) {
-
-                    // successfully created product
-                    Intent i = new Intent(mContext, userActivity.class);
-                    mContext.startActivity(i);
+                    Log.d("vriendenAdapter","Removed friend");
                 } else {
                     // failed to create product
                 }
@@ -203,7 +182,7 @@ public class zoekVriendenListAdapter extends BaseAdapter {
          * After completing background task Dismiss the progress dialog
          * **/
         protected void onPostExecute(String file_url) {
-            // dismiss the dialog once done
+
         }
 
     }

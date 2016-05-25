@@ -6,6 +6,17 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_create_user">createUserActivity</string>
     <string name="title_activity_zoek_vrienden">Zoek vrienden</string>
+    <string name="details_description_label_text">Omschrijving:</string>
+    <string name="details_date_label_text">Datum:</string>
+    <string name="details_starttime_label_text">Van:</string>
+    <string name="details_endtime_label_text">Tot:</string>
+    <string name="details_duration_label_text">Tijdsduur:</string>
+
+    <string-array name="paperclip_card_question">
+        <item>Camera</item>
+        <item>Gallery</item>
+    </string-array>
+
 
     <array name="icon_list">
         <item>Custom</item>

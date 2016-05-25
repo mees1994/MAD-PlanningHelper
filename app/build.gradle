@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "ass.mad.arnhem.han.planninghelper"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -33,5 +33,5 @@ dependencies {
     provided 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
     compile 'com.afollestad.material-dialogs:core:0.8.5.9'
     compile 'com.android.support:recyclerview-v7:+'
-
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
