@@ -1,43 +1,61 @@
 package ass.mad.arnhem.han.planninghelper;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import ass.mad.arnhem.han.planninghelper.Domain.Task;
 import ass.mad.arnhem.han.planninghelper.Domain.Week;
+import ass.mad.arnhem.han.planninghelper.users.JSONParser;
 
 public class DetailTaskActivity extends AppCompatActivity {
 
-    private int dayNr, taskPos, weekNr;
+    // Progress Dialog
+    private ProgressDialog pDialog;
+    // url to add punten
+    private static String url_create_product = "http://peterotten.com/AndroidProject/update_points.php";
+    JSONParser jsonParser = new JSONParser();
+
+    // JSON Node names
+    private static final String TAG_SUCCESS = "success";
+
+    private int dayNr, taskPos, weekNr, punten;
     private Button pictureBtn;
     private ImageView pictureIV;
     private String encodedImage;
@@ -99,13 +117,19 @@ public class DetailTaskActivity extends AppCompatActivity {
         if (task.getPicture() != null) {
             pictureIV.setImageBitmap(task.getPicture());
         }
-
         pictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onPictureBtnClicked();
             }
         });
+
+        if(task.isTaskCompleted()){
+            CheckBox checkBoxCompleted = (CheckBox) findViewById(R.id.detailsTaskDoneCheckbox);
+            checkBoxCompleted.setChecked(true);
+            checkBoxCompleted.setEnabled(false);
+
+        }
 
     }
 
@@ -115,6 +139,33 @@ public class DetailTaskActivity extends AppCompatActivity {
         cal.set(Calendar.DAY_OF_WEEK, dayNr + 1);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yy", Locale.getDefault());
         return sdf.format(cal.getTime());
+    }
+
+    private int calculatePoints() {
+        String startTijd = task.getStartTime();
+        String eindTijd = task.getEndTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        Date dateStart = null;
+        try {
+            dateStart = simpleDateFormat.parse(startTijd);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date dateEnd = null;
+        try {
+            dateEnd = simpleDateFormat.parse(eindTijd);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long difference = dateEnd.getTime() - dateStart.getTime();
+
+        if(difference > 0) {
+            int punten = Math.round((difference / 900000));
+            return Math.round(punten);
+        } else {
+            return 0;
+        }
+
     }
 
     public void onCameraBtnClicked() {
@@ -231,5 +282,121 @@ public class DetailTaskActivity extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    public void onCheckboxClicked(View view) {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+
+        // Check which checkbox was clicked
+        switch(view.getId()) {
+            case R.id.detailsTaskDoneCheckbox:
+                if (checked)
+                    finishTask();
+                else
+                // Remove the meat
+                break;
+            // TODO: Veggie sandwich
+        }
+    }
+
+    public void finishTask() {
+        if(!task.isTaskCompleted()){
+            task.setTaskCompleted(true);
+
+            SharedPreferences sharedPref = getSharedPreferences("PlanningHelper", Context.MODE_PRIVATE);
+            String gebruikersnaam = sharedPref.getString("gebruikersnaam", "nousername");
+            String voornaam = sharedPref.getString("voornaam","novoornaame");
+            String achternaam = sharedPref.getString("achternaam", "noachternaam");
+            String android_id = Settings.Secure.getString(getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+            this.punten = sharedPref.getInt("punten", 0);
+
+            // Loading products in Background Thread
+            if(gebruikersnaam != "nousername" || voornaam != "novoornaame" || achternaam != "noachternaam") {
+
+                int puntenErbij = calculatePoints();
+                this.punten = this.punten + puntenErbij;
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putInt("punten", this.punten);
+                editor.commit();
+                new SavePoints().execute(gebruikersnaam,android_id);
+            }
+        }else{
+            //is completed
+        }
+    }
+
+    /**
+     * Background Async Task to Create new product
+     * */
+    class SavePoints extends AsyncTask<String, String, String> {
+
+        /**
+         * Before starting background thread Show Progress Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(DetailTaskActivity.this);
+            pDialog.setMessage("Voegt punten toe..");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+        /**
+         * Creating product
+         * */
+        protected String doInBackground(String... args) {
+            String gebruikersnaam = args[0];
+            String android_id = args[1];
+
+            SharedPreferences sharedPref = getSharedPreferences("PlanningHelper", Context.MODE_PRIVATE);
+            int punten = sharedPref.getInt("punten", 0);
+
+            // Building Parameters
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("Gebruikersnaam", gebruikersnaam));
+            params.add(new BasicNameValuePair("android_id", android_id));
+            params.add(new BasicNameValuePair("Punten", Integer.toString(punten)));
+
+            // getting JSON Object
+            // Note that create product url accepts POST method
+            JSONObject json = jsonParser.makeHttpRequest(url_create_product,
+                    "POST", params);
+
+            // check log cat for response
+            Log.d("Create Response", json.toString());
+
+            // check for success tag
+            try {
+                int success = json.getInt(TAG_SUCCESS);
+                String message = json.getString("message");
+                Log.d("createUserActivity",message);
+
+                if (success == 1) {
+                    Log.d("Details","punten Toegevoegd");
+
+                    // closing this screen
+                    finish();
+                } else {
+                    // failed to create product
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog once done
+            pDialog.dismiss();
+        }
+
     }
 }

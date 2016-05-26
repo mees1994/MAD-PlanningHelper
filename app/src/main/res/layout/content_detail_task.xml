@@ -159,7 +159,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/detailsTaskDoneCheckbox"
-                    android:layout_toRightOf="@+id/detailsTaskDoneLabel" />
+                    android:layout_toRightOf="@+id/detailsTaskDoneLabel"
+                    android:onClick="onCheckboxClicked" />
 
 
             </RelativeLayout>
@@ -169,7 +170,7 @@
                 android:layout_below="@+id/detailsCheckboks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Picture"/>
+                android:text="Add Picture" />
 
         </LinearLayout>
 

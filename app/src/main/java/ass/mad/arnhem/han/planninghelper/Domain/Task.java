@@ -2,9 +2,6 @@ package ass.mad.arnhem.han.planninghelper.Domain;
 
 import android.graphics.Bitmap;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
  * Created by Mees on 5/17/2016.
  */
@@ -16,6 +13,7 @@ public class Task {
     private int icon;
     private boolean showGPS;
     private Bitmap picture;
+    private boolean taskCompleted;
 
     public Task(int taskId, String titel, String description, String startTime, String endTime, int icon, boolean showGPS, Bitmap picture) {
         this.taskId = taskId;
@@ -26,6 +24,7 @@ public class Task {
         this.icon = icon;
         this.showGPS = showGPS;
         this.picture = picture;
+        this.taskCompleted = false;
     }
 
     public int getTaskId() {
@@ -64,4 +63,11 @@ public class Task {
         this.picture = picture;
     }
 
+    public boolean isTaskCompleted() {
+        return taskCompleted;
+    }
+
+    public void setTaskCompleted(boolean taskCompleted) {
+        this.taskCompleted = taskCompleted;
+    }
 }

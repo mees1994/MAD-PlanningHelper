@@ -71,7 +71,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/create_task_start_time_text"
-                    android:layout_toLeftOf="@+id/btn_start_time"/>
+                    android:layout_toLeftOf="@+id/btn_start_time"
+                    android:enabled="false"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -107,7 +108,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/create_task_end_time_text"
-                    android:layout_toLeftOf="@+id/btn_end_time"/>
+                    android:layout_toLeftOf="@+id/btn_end_time"
+                    android:enabled="false"/>
 
                 <Button
                     android:layout_width="wrap_content"

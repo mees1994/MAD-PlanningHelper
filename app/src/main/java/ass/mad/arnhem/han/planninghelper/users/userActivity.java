@@ -62,12 +62,15 @@ public class userActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        pDialog = new ProgressDialog(userActivity.this);
         setContentView(R.layout.activity_user);
 
         SharedPreferences sharedPref = getSharedPreferences("PlanningHelper", Context.MODE_PRIVATE);
         String gebruikersnaam = sharedPref.getString("gebruikersnaam", "nousername");
         String voornaam = sharedPref.getString("voornaam","novoornaame");
         String achternaam = sharedPref.getString("achternaam","noachternaam");
+        int punten = sharedPref.getInt("punten",0);
 
         // Loading products in Background Thread
         if(gebruikersnaam == "nousername" || voornaam == "novoornaame" || achternaam == "noachternaam") {
@@ -76,11 +79,13 @@ public class userActivity extends AppCompatActivity {
             TextView txtGebruikersnaam = (TextView) findViewById(R.id.overviewGebruikersnaam);
             TextView textVoornaam = (TextView) findViewById(R.id.overviewVoornaam);
             TextView textAchternaam = (TextView) findViewById(R.id.overviewAchternaam);
+            TextView textPunten = (TextView) findViewById(R.id.overviewPunten);
 
             // display product data in EditText
             txtGebruikersnaam.setText(gebruikersnaam);
             textVoornaam.setText(voornaam);
             textAchternaam.setText(achternaam);
+            textPunten.setText(Integer.toString(punten));
         }
 
         //TODO laad vriendjes met punten en verwijderen
@@ -144,7 +149,6 @@ public class userActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(userActivity.this);
             pDialog.setMessage("Loading user details. Please wait...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
@@ -185,6 +189,7 @@ public class userActivity extends AppCompatActivity {
                     resultProduct[0] = product.getString(TAG_GEBRUIKERSNAAM);
                     resultProduct[1] = product.getString(TAG_VOORNAAM);
                     resultProduct[2] = product.getString(TAG_ACHTERNAAM);
+                    resultProduct[3] = product.getString("Punten");
 
                     Log.d("result",  product.getString(TAG_GEBRUIKERSNAAM));
 
@@ -194,7 +199,7 @@ public class userActivity extends AppCompatActivity {
                     editor.putString("voornaam",product.getString(TAG_VOORNAAM));
                     editor.putString("achternaam", product.getString(TAG_ACHTERNAAM));
                     editor.putString("usernameid",  product.getString("ID"));
-                    editor.putString("punten",  product.getString("Punten"));
+                    editor.putInt("punten", Integer.parseInt(product.getString("Punten")));
                     editor.apply();
 
                     return resultProduct;
@@ -221,14 +226,16 @@ public class userActivity extends AppCompatActivity {
         protected void onPostExecute(String[] result) {
             // product with this pid found
             // Edit Text
-            TextView txtGebruikersnaam = (TextView) findViewById(R.id.overviewGebruikersnaam);
+            TextView textGebruikersnaam = (TextView) findViewById(R.id.overviewGebruikersnaam);
             TextView textVoornaam = (TextView) findViewById(R.id.overviewVoornaam);
             TextView textAchternaam = (TextView) findViewById(R.id.overviewAchternaam);
+            TextView textPunten = (TextView) findViewById(R.id.overviewPunten);
 
             // display product data in EditText
-            txtGebruikersnaam.setText(result[0]);
+            textGebruikersnaam.setText(result[0]);
             textVoornaam.setText(result[1]);
             textAchternaam.setText(result[2]);
+            textPunten.setText(result[3]);
 
             // dismiss the dialog once got all details
             pDialog.dismiss();
@@ -247,7 +254,6 @@ public class userActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(userActivity.this);
             pDialog.setMessage("Loading friends. Please wait...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(true);
