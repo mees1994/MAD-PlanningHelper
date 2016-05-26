@@ -6,22 +6,18 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -30,9 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -137,7 +131,7 @@ public class DetailTaskActivity extends AppCompatActivity {
         }
         long durationAmount = (dEndTime.getTime() - dStartTime.getTime());
         Log.e("DetailTaskActivity", String.valueOf(durationAmount));
-        duration.setText(String.valueOf(durationAmount));
+        setDuration(durationAmount, duration);
 
         if (task.getPicture() != null) {
             pictureIV.setImageBitmap(task.getPicture());
@@ -156,6 +150,21 @@ public class DetailTaskActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void setDuration(long durationAmount, TextView duration) {
+        Calendar duurCalender = Calendar.getInstance();
+        duurCalender.setTimeInMillis(durationAmount);
+        String duurHour = Integer.toString(duurCalender.get(Calendar.HOUR));
+        String duurMinute = Integer.toString(duurCalender.get(Calendar.MINUTE));
+        if(duurCalender.get(Calendar.HOUR) < 10){
+            duurHour = "0" + duurHour;
+        }
+        if(duurCalender.get(Calendar.MINUTE) < 10){
+            duurMinute = "0" + duurMinute;
+        }
+
+        duration.setText(duurHour + ":" + duurMinute);
     }
 
     private String calculateDate() {
