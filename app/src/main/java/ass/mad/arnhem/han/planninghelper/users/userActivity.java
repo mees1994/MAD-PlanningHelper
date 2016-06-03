@@ -159,7 +159,7 @@ public class userActivity extends AppCompatActivity {
          * Getting user details in background thread
          * */
         protected String[] doInBackground(String... params) {
-            String[] resultProduct = new String[3];
+            String[] resultProduct = new String[4];
             int success;
             try {
                 String android_id = Settings.Secure.getString(getContentResolver(),
@@ -232,10 +232,12 @@ public class userActivity extends AppCompatActivity {
             TextView textPunten = (TextView) findViewById(R.id.overviewPunten);
 
             // display product data in EditText
-            textGebruikersnaam.setText(result[0]);
-            textVoornaam.setText(result[1]);
-            textAchternaam.setText(result[2]);
-            textPunten.setText(result[3]);
+            if(result == null) {
+                textGebruikersnaam.setText(result[0]);
+                textVoornaam.setText(result[1]);
+                textAchternaam.setText(result[2]);
+                textPunten.setText(result[3]);
+            }
 
             // dismiss the dialog once got all details
             pDialog.dismiss();
