@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import ass.mad.arnhem.han.planninghelper.R;
 
@@ -52,7 +53,6 @@ public class userActivity extends AppCompatActivity {
     private static final String TAG_PUNTEN ="Punten";
 
     // products JSONArray
-    JSONArray products = null;
     Button btnCreateUser;
 
     vriendenOverzichtAdapter vriendenOverzichtAdapter;
@@ -73,25 +73,30 @@ public class userActivity extends AppCompatActivity {
         int punten = sharedPref.getInt("punten",0);
 
         // Loading products in Background Thread
-        if(gebruikersnaam == "nousername" || voornaam == "novoornaame" || achternaam == "noachternaam") {
+        if(Objects.equals(gebruikersnaam, "nousername") || Objects.equals(voornaam, "novoornaame") || Objects.equals(achternaam, "noachternaam")) {
+            Log.d(this.toString(),"else load user data");
             new loadUser().execute();
         } else{
+            Log.d(this.toString(),"else set data");
             TextView txtGebruikersnaam = (TextView) findViewById(R.id.overviewGebruikersnaam);
             TextView textVoornaam = (TextView) findViewById(R.id.overviewVoornaam);
             TextView textAchternaam = (TextView) findViewById(R.id.overviewAchternaam);
             TextView textPunten = (TextView) findViewById(R.id.overviewPunten);
 
             // display product data in EditText
-            txtGebruikersnaam.setText(gebruikersnaam);
-            textVoornaam.setText(voornaam);
-            textAchternaam.setText(achternaam);
-            textPunten.setText(Integer.toString(punten));
+            if (txtGebruikersnaam != null) {
+                txtGebruikersnaam.setText(gebruikersnaam);
+            }
+            if (textVoornaam != null) {
+                textVoornaam.setText(voornaam);
+            }
+            if (textAchternaam != null) {
+                textAchternaam.setText(achternaam);
+            }
+            if (textPunten != null) {
+                textPunten.setText(Integer.toString(punten));
+            }
         }
-
-        //TODO laad vriendjes met punten en verwijderen
-        //personList = new ArrayList<HashMap<String,String>>();
-        //new findFriends().execute();
-
 
         btnCreateUser = (Button) findViewById(R.id.buttonZoekVrienden);
 
@@ -135,7 +140,13 @@ public class userActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         personList = new ArrayList<HashMap<String,String>>();
-        new findFriends().execute();
+        SharedPreferences sharedPref = getSharedPreferences("PlanningHelper", Context.MODE_PRIVATE);
+        String gebruikersnaam = sharedPref.getString("gebruikersnaam", "nousername");
+        String voornaam = sharedPref.getString("voornaam","novoornaame");
+        String achternaam = sharedPref.getString("achternaam","noachternaam");
+        if(!Objects.equals(gebruikersnaam, "nousername") || !Objects.equals(voornaam, "novoornaame") || !Objects.equals(achternaam, "noachternaam")) {
+            new findFriends().execute();
+        }
     }
 
     /**
@@ -232,10 +243,16 @@ public class userActivity extends AppCompatActivity {
             TextView textPunten = (TextView) findViewById(R.id.overviewPunten);
 
             // display product data in EditText
-            if(result == null) {
+            if (textGebruikersnaam != null) {
                 textGebruikersnaam.setText(result[0]);
+            }
+            if (textVoornaam != null) {
                 textVoornaam.setText(result[1]);
+            }
+            if (textAchternaam != null) {
                 textAchternaam.setText(result[2]);
+            }
+            if (textPunten != null) {
                 textPunten.setText(result[3]);
             }
 
